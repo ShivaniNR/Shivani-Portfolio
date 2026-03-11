@@ -464,7 +464,7 @@ export default function Portfolio() {
               </div>
 
               <h1 className="text-5xl md:text-7xl font-bold text-slate-900 dark:text-white leading-tight">
-                Hi, I'm{" "}
+                Hi, I&apos;m{" "}
                 <span className="bg-gradient-to-r from-cyan-500 to-blue-600 dark:from-cyan-400 dark:to-blue-500 bg-clip-text text-transparent">
                   Shivani Rupnawar
                 </span>
@@ -593,12 +593,12 @@ export default function Portfolio() {
               <div className="grid md:grid-cols-[60%_40%] gap-12">
                 <div className="space-y-6">
                   <p className="text-lg text-slate-800 dark:text-slate-400 leading-relaxed font-medium">
-                    The short version: I build intelligent systems that don’t
+                    The short version: I build intelligent systems that don&apos;t
                     break.
                   </p>
                   <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-                    I’m a Software Engineer with an M.Sc. in Web and Data
-                    Science and a genuine love for the "logic" of coding. I’m
+                    I&apos;m a Software Engineer with an M.Sc. in Web and Data
+                    Science and a genuine love for the &quot;logic&quot; of coding. I&apos;m
                     the developer who gets a dopamine hit from taking a tangled,
                     complex problem and streamlining it into an elegant, modular
                     solution.
@@ -619,14 +619,14 @@ export default function Portfolio() {
                       <span>Rapid Learning & Curiosity: </span>
                       <p className="inline">
                         I thrive on steep learning curves. Give me a new tool or
-                        a complex system, and I’ll dive in headfirst to find a
+                        a complex system, and I&apos;ll dive in headfirst to find a
                         practical way to use it.
                       </p>
                     </li>
                     <li className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
                       <span>Collaborative Energy: </span>
                       <p className="inline">
-                        I’m a "let’s figure this out" teammate. I work closely
+                        I&apos;m a &quot;let&apos;s figure this out&quot; teammate. I work closely
                         with designers and engineers to turn abstract ideas into
                         production-ready features quickly.
                       </p>
@@ -636,9 +636,9 @@ export default function Portfolio() {
                     Current Focus
                   </h3>
                   <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-                    I’m currently exploring AI-powered engineering, including
+                    I&apos;m currently exploring AI-powered engineering, including
                     LLM orchestration, vector embeddings (FAISS), and
-                    intelligent analytics. I’m fascinated by turning emerging
+                    intelligent analytics. I&apos;m fascinated by turning emerging
                     tech into practical tools that solve tangible problems.
                   </p>
 
@@ -646,11 +646,11 @@ export default function Portfolio() {
                     <p className="font-medium inline text-lg text-slate-800 dark:text-slate-400">
                       My Code Philosophy:
                     </p>{" "}
-                    If a human can’t read it, it’s not finished. I write clean,
+                    If a human can't read it, it's not finished. I write clean,
                     maintainable architecture from the start so that the next
                     developer (or future me) doesn't need a map to find their
                     way around. I thrive in the "collaborative chaos" of a
-                    sprint. I’m a high-energy communicator who turns abstract
+                    sprint. I'm a high-energy communicator who turns abstract
                     "what-ifs" into production-grade features—fast.
                   </p> */}
 
@@ -1078,7 +1078,7 @@ export default function Portfolio() {
                   </h2>
                 </div>
                 <p className="text-lg text-slate-600 dark:text-slate-400">
-                  Have a project in mind or want to collaborate? I'd love to
+                  Have a project in mind or want to collaborate? I&apos;d love to
                   hear from you!
                 </p>
               </div>
@@ -1133,11 +1133,11 @@ export default function Portfolio() {
 
                 <div className="bg-gradient-to-br from-cyan-500 to-blue-600 p-8 rounded-2xl text-white">
                   <h3 className="text-2xl font-bold mb-4">
-                    Let's Build Something Amazing
+                    Let&apos;s Build Something Amazing
                   </h3>
                   <p className="mb-6 opacity-90">
                     Whether you have a project in mind, need technical
-                    consultation, or just want to connect, I'm always open to
+                    consultation, or just want to connect, I&apos;m always open to
                     discussing new opportunities.
                   </p>
                   <a
