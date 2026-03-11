@@ -962,12 +962,19 @@ export default function Portfolio() {
               <div className="grid md:grid-cols-2 gap-8">
                 {[
                   {
-                    title: "Project One",
+                    title: "Finance Tracker with GraphQL",
                     description:
-                      "A full-stack e-commerce platform with real-time inventory management and payment processing.",
-                    tech: ["React", "Node.js", "MongoDB", "Stripe"],
+                      "A full-stack finance tracker web application that helps users manage their financial transactions, track spending patterns, and gain insights into their financial health.",
+                    tech: [
+                      "React",
+                      "Node.js",
+                      "GraphQL",
+                      "Chrome Prompt API",
+                      "Recharts",
+                    ],
                     image: "🛒",
-                    github: "#",
+                    github:
+                      "https://github.com/ShivaniNR/Finance-Tracker-using-GraphQL",
                     live: "#",
                   },
                   {
