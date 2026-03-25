@@ -14,13 +14,16 @@ import {
   User,
   FolderGit2,
   Send,
+  Menu,
+  X,
 } from "lucide-react";
 import FourPiecePuzzle from "./FourPiecePuzzle";
 import PortfolioStyledPuzzle from "./PortfolioStyledPuzzle";
 
 export default function Portfolio() {
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
@@ -406,10 +409,21 @@ export default function Portfolio() {
   return (
     <div className={darkMode ? "dark" : ""}>
       <div className="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-500">
+        {/* Skip to content link for keyboard users */}
+        <a
+          href="#home"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:bg-cyan-600 focus:text-white focus:rounded-lg"
+        >
+          Skip to main content
+        </a>
+
         {/* Floating Navigation */}
-        <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/80 dark:bg-slate-950/80 border-b border-slate-200 dark:border-slate-800">
-          <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-500 to-blue-600 dark:from-cyan-400 dark:to-blue-500 bg-clip-text text-transparent">
+        <nav
+          aria-label="Main navigation"
+          className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/80 dark:bg-slate-950/80 border-b border-slate-200 dark:border-slate-800"
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+            <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-cyan-500 to-blue-600 dark:from-cyan-400 dark:to-blue-500 bg-clip-text text-transparent">
               Shivani Rupnawar
             </h1>
 
@@ -435,214 +449,309 @@ export default function Portfolio() {
               </a>
             </div>
 
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              className="p-2 rounded-lg bg-slate-200 dark:bg-slate-800 hover:scale-110 transition-transform"
-            >
-              {darkMode ? (
-                <Sun className="w-5 h-5 text-yellow-500" />
-              ) : (
-                <Moon className="w-5 h-5 text-slate-700" />
-              )}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setDarkMode(!darkMode)}
+                aria-label={
+                  darkMode ? "Switch to light mode" : "Switch to dark mode"
+                }
+                className="p-2 rounded-lg bg-slate-200 dark:bg-slate-800 hover:scale-110 transition-transform"
+              >
+                {darkMode ? (
+                  <Sun className="w-5 h-5 text-yellow-500" aria-hidden="true" />
+                ) : (
+                  <Moon className="w-5 h-5 text-slate-700" aria-hidden="true" />
+                )}
+              </button>
+
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+                aria-expanded={mobileMenuOpen}
+                className="md:hidden p-2 rounded-lg bg-slate-200 dark:bg-slate-800"
+              >
+                {mobileMenuOpen ? (
+                  <X
+                    className="w-5 h-5 text-slate-700 dark:text-slate-300"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <Menu
+                    className="w-5 h-5 text-slate-700 dark:text-slate-300"
+                    aria-hidden="true"
+                  />
+                )}
+              </button>
+            </div>
           </div>
+
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <div
+              role="menu"
+              aria-label="Mobile navigation"
+              className="md:hidden px-4 pb-4 space-y-2 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md"
+            >
+              {["About", "Skills", "Experience", "Projects", "Contact"].map(
+                (item) => (
+                  <button
+                    key={item}
+                    onClick={() => {
+                      scrollToSection(item.toLowerCase());
+                      setMobileMenuOpen(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors font-medium"
+                  >
+                    {item}
+                  </button>
+                ),
+              )}
+              <a
+                href="/Shivani_Rupnawar.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full text-center px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-medium transition-colors"
+              >
+                Resume
+              </a>
+            </div>
+          )}
         </nav>
 
-        {/* Hero Section */}
-        <section
-          id="home"
-          className="min-h-screen flex items-center justify-center px-6 pt-20"
-        >
-          <div className="max-w-6xl w-full grid md:grid-cols-2 gap-12 items-center">
-            <div
-              className={`space-y-6 transform transition-all duration-1000 ${isVisible.home ? "translate-x-0 opacity-100" : "-translate-x-20 opacity-0"}`}
-            >
-              <div className="inline-block px-4 py-2 bg-cyan-100 dark:bg-cyan-900/30 rounded-full">
-                <span className="text-cyan-600 dark:text-cyan-400 font-semibold">
-                  👋 Welcome to my portfolio
-                </span>
-              </div>
-
-              <h1 className="text-5xl md:text-7xl font-bold text-slate-900 dark:text-white leading-tight">
-                Hi, I&apos;m{" "}
-                <span className="bg-gradient-to-r from-cyan-500 to-blue-600 dark:from-cyan-400 dark:to-blue-500 bg-clip-text text-transparent">
-                  Shivani Rupnawar
-                </span>
-              </h1>
-
-              <p className="text-xl text-slate-600 dark:text-slate-400 leading-relaxed">
-                Full-Stack Developer crafting elegant solutions to complex
-                problems. Passionate about building scalable web applications
-                and creating seamless user experiences.
-              </p>
-
-              <div className="flex gap-4">
-                <button
-                  onClick={() => scrollToSection("projects")}
-                  className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-all"
-                >
-                  View My Work
-                </button>
-                <button
-                  onClick={() => scrollToSection("contact")}
-                  className="px-8 py-3 border-2 border-cyan-500 dark:border-cyan-400 text-cyan-600 dark:text-cyan-400 rounded-lg font-semibold hover:bg-cyan-50 dark:hover:bg-cyan-900/30 transition-all"
-                >
-                  Get in Touch
-                </button>
-              </div>
-
-              <div className="flex gap-4 pt-4">
-                <a
-                  href="#"
-                  className="p-3 bg-slate-200 dark:bg-slate-800 rounded-lg hover:scale-110 transition-transform"
-                >
-                  <Github className="w-6 h-6 text-slate-700 dark:text-slate-300" />
-                </a>
-                <a
-                  href="#"
-                  className="p-3 bg-slate-200 dark:bg-slate-800 rounded-lg hover:scale-110 transition-transform"
-                >
-                  <Linkedin className="w-6 h-6 text-slate-700 dark:text-slate-300" />
-                </a>
-                <a
-                  href="#"
-                  className="p-3 bg-slate-200 dark:bg-slate-800 rounded-lg hover:scale-110 transition-transform"
-                >
-                  <Mail className="w-6 h-6 text-slate-700 dark:text-slate-300" />
-                </a>
-              </div>
-            </div>
-
-            <div
-              className={`relative transform transition-all duration-1000 delay-300 ${isVisible.home ? "translate-x-0 opacity-100" : "translate-x-20 opacity-0"}`}
-            >
-              <div className="relative w-full aspect-square max-w-md mx-auto">
-                {/* Animated background circles */}
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full blur-3xl opacity-20 animate-pulse"></div>
-                <div
-                  className="absolute inset-10 bg-gradient-to-tr from-blue-500 to-cyan-500 rounded-full blur-2xl opacity-20 animate-pulse"
-                  style={{ animationDelay: "1s" }}
-                ></div>
-
-                {/* Profile photo placeholder */}
-                <div className="relative z-10 w-full h-full rounded-full overflow-hidden border-8 border-white dark:border-slate-950 shadow-2xl">
-                  {/* <div className="w-full h-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-white text-6xl font-bold">
-                    SR
-                  </div> */}
-                  <img
-                    src="/ShivaniProfile.png"
-                    alt="Shivani Rupnawar"
-                    className="w-full h-full object-cover object-center object-top"
-                  />
-                  {/* Replace the div above with:  */}
-                </div>
-
-                {/* Floating code snippet */}
-                <div className="absolute -right-15 top-0 z-20 bg-white dark:bg-slate-900 p-4 rounded-lg shadow-xl border border-slate-200 dark:border-slate-800 animate-float">
-                  <code className="text-sm text-slate-800 dark:text-slate-200">
-                    <span className="text-blue-600 dark:text-blue-400">
-                      const
-                    </span>{" "}
-                    dev = &#123;
-                    <br />
-                    <span className="ml-4">
-                      passionate: <span className="text-green-600">true</span>
-                    </span>
-                    <br />
-                    &#125;;
-                  </code>
-                </div>
-
-                {/* Floating tech badge */}
-                <div
-                  className="absolute -left-8 bottom-5 z-20 bg-white dark:bg-slate-900 px-4 py-2 rounded-full shadow-xl border border-slate-200 dark:border-slate-800 animate-float"
-                  style={{ animationDelay: "0.5s" }}
-                >
-                  <span className="text-sm font-semibold text-cyan-600 dark:text-cyan-400">
-                    ⚡ Full-Stack Developer
+        <main>
+          {/* Hero Section */}
+          <section
+            id="home"
+            aria-label="Hero"
+            className="min-h-screen flex items-center justify-center px-6 pt-20"
+          >
+            <div className="max-w-6xl w-full grid md:grid-cols-2 gap-12 items-center">
+              <div
+                className={`space-y-6 transform transition-all duration-1000 ${isVisible.home ? "translate-x-0 opacity-100" : "-translate-x-20 opacity-0"}`}
+              >
+                <div className="inline-block px-4 py-2 bg-cyan-100 dark:bg-cyan-900/30 rounded-full">
+                  <span className="text-cyan-600 dark:text-cyan-400 font-semibold">
+                    👋 Welcome to my portfolio
                   </span>
                 </div>
+
+                <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold text-slate-900 dark:text-white leading-tight">
+                  Hi, I&apos;m{" "}
+                  <span className="bg-gradient-to-r from-cyan-500 to-blue-600 dark:from-cyan-400 dark:to-blue-500 bg-clip-text text-transparent">
+                    Shivani Rupnawar
+                  </span>
+                </h1>
+
+                <p className="text-xl text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Full-Stack Developer crafting elegant solutions to complex
+                  problems. Passionate about building scalable web applications,
+                  seamless user experiences, and AI-enhanced workflows.
+                </p>
+
+                <div className="flex flex-wrap gap-3 sm:gap-4">
+                  <button
+                    onClick={() => scrollToSection("projects")}
+                    className="px-6 sm:px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-all text-sm sm:text-base"
+                  >
+                    View My Work
+                  </button>
+                  <button
+                    onClick={() => scrollToSection("contact")}
+                    className="px-6 sm:px-8 py-3 border-2 border-cyan-500 dark:border-cyan-400 text-cyan-600 dark:text-cyan-400 rounded-lg font-semibold hover:bg-cyan-50 dark:hover:bg-cyan-900/30 transition-all text-sm sm:text-base"
+                  >
+                    Get in Touch
+                  </button>
+                </div>
+
+                <div
+                  className="flex gap-4 pt-4"
+                  role="group"
+                  aria-label="Social links"
+                >
+                  <a
+                    href="https://github.com/ShivaniNR"
+                    aria-label="GitHub profile"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 bg-slate-200 dark:bg-slate-800 rounded-lg hover:scale-110 transition-transform"
+                  >
+                    <Github
+                      className="w-6 h-6 text-slate-700 dark:text-slate-300"
+                      aria-hidden="true"
+                    />
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/shivani-rupnawar/"
+                    aria-label="LinkedIn profile"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 bg-slate-200 dark:bg-slate-800 rounded-lg hover:scale-110 transition-transform"
+                  >
+                    <Linkedin
+                      className="w-6 h-6 text-slate-700 dark:text-slate-300"
+                      aria-hidden="true"
+                    />
+                  </a>
+                  <a
+                    href="mailto:shivani.n.rupnawar@gmail.com"
+                    aria-label="Send email"
+                    className="p-3 bg-slate-200 dark:bg-slate-800 rounded-lg hover:scale-110 transition-transform"
+                  >
+                    <Mail
+                      className="w-6 h-6 text-slate-700 dark:text-slate-300"
+                      aria-hidden="true"
+                    />
+                  </a>
+                </div>
+              </div>
+
+              <div
+                className={`relative transform transition-all duration-1000 delay-300 ${isVisible.home ? "translate-x-0 opacity-100" : "translate-x-20 opacity-0"}`}
+              >
+                <div className="relative w-full aspect-square max-w-md mx-auto">
+                  {/* Animated background circles */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full blur-3xl opacity-20 animate-pulse"></div>
+                  <div
+                    className="absolute inset-10 bg-gradient-to-tr from-blue-500 to-cyan-500 rounded-full blur-2xl opacity-20 animate-pulse"
+                    style={{ animationDelay: "1s" }}
+                  ></div>
+
+                  {/* Profile photo placeholder */}
+                  <div className="relative z-10 w-full h-full rounded-full overflow-hidden border-8 border-white dark:border-slate-950 shadow-2xl">
+                    {/* <div className="w-full h-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-white text-6xl font-bold">
+                    SR
+                  </div> */}
+                    <img
+                      src="/ShivaniProfile.png"
+                      alt="Shivani Rupnawar"
+                      className="w-full h-full object-cover object-center object-top"
+                    />
+                    {/* Replace the div above with:  */}
+                  </div>
+
+                  {/* Floating code snippet */}
+                  <div
+                    aria-hidden="true"
+                    className="hidden sm:block absolute -right-4 md:-right-15 top-0 z-20 bg-white dark:bg-slate-900 p-3 md:p-4 rounded-lg shadow-xl border border-slate-200 dark:border-slate-800 animate-float"
+                  >
+                    <code className="text-sm text-slate-800 dark:text-slate-200">
+                      <span className="text-blue-600 dark:text-blue-400">
+                        const
+                      </span>{" "}
+                      dev = &#123;
+                      <br />
+                      <span className="ml-4">
+                        passionate: <span className="text-green-600">true</span>
+                      </span>
+                      <br />
+                      &#125;;
+                    </code>
+                  </div>
+
+                  {/* Floating tech badge */}
+                  <div
+                    aria-hidden="true"
+                    className="hidden sm:block absolute -left-4 md:-left-8 bottom-5 z-20 bg-white dark:bg-slate-900 px-3 md:px-4 py-2 rounded-full shadow-xl border border-slate-200 dark:border-slate-800 animate-float"
+                    style={{ animationDelay: "0.5s" }}
+                  >
+                    <span className="text-sm font-semibold text-cyan-600 dark:text-cyan-400">
+                      ⚡ Full-Stack Developer
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <button
-            onClick={() => scrollToSection("about")}
-            className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce"
-          >
-            <ChevronDown className="w-8 h-8 text-slate-400" />
-          </button>
-        </section>
-
-        {/* About Section */}
-        <section
-          id="about"
-          className="min-h-screen flex items-center px-6 py-20 bg-slate-50 dark:bg-slate-900/50"
-        >
-          <div className="max-w-6xl mx-auto w-full">
-            <div
-              className={`transform transition-all duration-1000 ${isVisible.about ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}
+            <button
+              onClick={() => scrollToSection("about")}
+              aria-label="Scroll to about section"
+              className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce"
             >
-              <div className="flex items-center gap-3 mb-8">
-                <User className="w-8 h-8 text-cyan-600 dark:text-cyan-400" />
-                <h2 className="text-4xl font-bold text-slate-900 dark:text-white">
-                  Who Am I?
-                </h2>
-              </div>
+              <ChevronDown
+                className="w-8 h-8 text-slate-400"
+                aria-hidden="true"
+              />
+            </button>
+          </section>
 
-              <div className="grid md:grid-cols-[60%_40%] gap-12">
-                <div className="space-y-6">
-                  <p className="text-lg text-slate-800 dark:text-slate-400 leading-relaxed font-medium">
-                    The short version: I build intelligent systems that don&apos;t
-                    break.
-                  </p>
-                  <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-                    I&apos;m a Software Engineer with an M.Sc. in Web and Data
-                    Science and a genuine love for the &quot;logic&quot; of coding. I&apos;m
-                    the developer who gets a dopamine hit from taking a tangled,
-                    complex problem and streamlining it into an elegant, modular
-                    solution.
-                  </p>
-                  <h4 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
-                    How I Work
-                  </h4>
-                  <ul className="list-disc pl-4 ml-4">
-                    <li className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-                      <span>Human-Centric Code: </span>
-                      <p className="inline">
-                        I believe clean, maintainable architecture is just as
-                        important as a passing test suite. I turn tangled
-                        requirements into organized solutions that last.
-                      </p>
-                    </li>
-                    <li className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-                      <span>Rapid Learning & Curiosity: </span>
-                      <p className="inline">
-                        I thrive on steep learning curves. Give me a new tool or
-                        a complex system, and I&apos;ll dive in headfirst to find a
-                        practical way to use it.
-                      </p>
-                    </li>
-                    <li className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-                      <span>Collaborative Energy: </span>
-                      <p className="inline">
-                        I&apos;m a &quot;let&apos;s figure this out&quot; teammate. I work closely
-                        with designers and engineers to turn abstract ideas into
-                        production-ready features quickly.
-                      </p>
-                    </li>
-                  </ul>
-                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
-                    Current Focus
-                  </h3>
-                  <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-                    I&apos;m currently exploring AI-powered engineering, including
-                    LLM orchestration, vector embeddings (FAISS), and
-                    intelligent analytics. I&apos;m fascinated by turning emerging
-                    tech into practical tools that solve tangible problems.
-                  </p>
+          {/* About Section */}
+          <section
+            id="about"
+            aria-label="About me"
+            className="min-h-screen flex items-center px-6 py-20 bg-slate-50 dark:bg-slate-900/50"
+          >
+            <div className="max-w-6xl mx-auto w-full">
+              <div
+                className={`transform transition-all duration-1000 ${isVisible.about ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}
+              >
+                <div className="flex items-center gap-3 mb-8">
+                  <User
+                    className="w-8 h-8 text-cyan-600 dark:text-cyan-400"
+                    aria-hidden="true"
+                  />
+                  <h2 className="text-2xl sm:text-4xl font-bold text-slate-900 dark:text-white">
+                    Who Am I?
+                  </h2>
+                </div>
 
-                  {/* <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
+                <div className="grid md:grid-cols-[60%_40%] gap-12">
+                  <div className="space-y-6">
+                    <p className="text-lg text-slate-800 dark:text-slate-400 leading-relaxed font-medium">
+                      The short version: I design and build systems that scale
+                      reliably and adapt intelligently.
+                    </p>
+                    <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
+                      I&apos;m a Software Engineer (M.Sc. in Web & Data Science)
+                      who thrives on turning messy, ambiguous problems into
+                      structured, reliable solutions, often enhanced with AI.
+                    </p>
+                    <h4 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+                      How I Work
+                    </h4>
+                    <ul className="list-none space-y-4">
+                      <li className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
+                        <span className="font-semibold text-cyan-600 dark:text-cyan-400">
+                          System-First Thinking:{" "}
+                        </span>
+                        <p className="inline">
+                          I design systems before implementation. Whether
+                          it&apos;s an API, data pipeline, or AI workflow, I
+                          consider architecture, trade-offs, and long-term
+                          behavior, not just getting it to run.
+                        </p>
+                      </li>
+                      <li className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
+                        <span className="font-semibold text-cyan-600 dark:text-cyan-400">
+                          AI-Enhanced Workflows:{" "}
+                        </span>
+                        <p className="inline">
+                          I integrate AI not just as a feature, but to make
+                          systems smarter, assist users, and handle complexity.
+                        </p>
+                      </li>
+                      <li className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
+                        <span className="font-semibold text-cyan-600 dark:text-cyan-400">
+                          Collaborative Energy:{" "}
+                        </span>
+                        <p className="inline">
+                          I&apos;m a &quot;let&apos;s figure this out&quot;
+                          teammate, turning abstract ideas into production-ready
+                          features alongside designers and engineers.
+                        </p>
+                      </li>
+                    </ul>
+                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+                      Current Focus
+                    </h3>
+                    <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
+                      I&apos;m currently exploring AI-powered engineering,
+                      including LLM orchestration, vector embeddings (FAISS),
+                      and intelligent analytics. What excites me most is not
+                      just using these tools, but designing workflows where
+                      systems can reason, assist, and adapt in meaningful ways.
+                    </p>
+
+                    {/* <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
                     <p className="font-medium inline text-lg text-slate-800 dark:text-slate-400">
                       My Code Philosophy:
                     </p>{" "}
@@ -654,7 +763,7 @@ export default function Portfolio() {
                     "what-ifs" into production-grade features—fast.
                   </p> */}
 
-                  {/* <div className="grid grid-cols-2 gap-4 pt-4">
+                    {/* <div className="grid grid-cols-2 gap-4 pt-4">
                     <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700">
                       <h3 className="text-3xl font-bold text-cyan-600 dark:text-cyan-400">
                         X+
@@ -672,9 +781,9 @@ export default function Portfolio() {
                       </p>
                     </div>
                   </div> */}
-                </div>
+                  </div>
 
-                {/* <div className="bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-slate-800 dark:to-cyan-900/20 p-8 rounded-2xl border border-cyan-200 dark:border-cyan-800/30">
+                  {/* <div className="bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-slate-800 dark:to-cyan-900/20 p-8 rounded-2xl border border-cyan-200 dark:border-cyan-800/30">
                   {/* <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
                     Quick Facts
                   </h3>
@@ -724,438 +833,504 @@ export default function Portfolio() {
                   </a> *
                   <FourPiecePuzzle />
                 </div> */}
-                <div className="bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-slate-800 dark:to-cyan-900/20 p-6 md:p-8 rounded-2xl border border-cyan-200 dark:border-cyan-800/30 overflow-hidden">
-                  <PortfolioStyledPuzzle />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Skills Section */}
-        <section
-          id="skills"
-          className="min-h-screen flex items-center px-6 py-20"
-        >
-          <div className="max-w-6xl mx-auto w-full">
-            <div
-              className={`transform transition-all duration-1000 ${isVisible.skills ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}
-            >
-              <div className="flex items-center gap-3 mb-12">
-                <Code2 className="w-8 h-8 text-cyan-600 dark:text-cyan-400" />
-                <h2 className="text-4xl font-bold text-slate-900 dark:text-white">
-                  Skills & Technologies
-                </h2>
-              </div>
-
-              {/* Frontend Skills */}
-              <div className="mb-12">
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
-                  Frontend
-                </h3>
-                <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-6">
-                  {skills.frontend.map((skill, idx) => (
-                    <div
-                      key={idx}
-                      className="group flex flex-col items-center gap-3 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all hover:-translate-y-2 hover:border-cyan-400 dark:hover:border-cyan-500"
-                    >
-                      <div
-                        className="w-16 h-16 flex items-center justify-center transition-transform group-hover:scale-110"
-                        style={{ color: darkMode ? skill.color : skill.color }}
-                      >
-                        {skill.icon}
-                      </div>
-                      <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 text-center">
-                        {skill.name}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Backend Skills */}
-              <div className="mb-12">
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
-                  Backend
-                </h3>
-                <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                  {skills.backend.map((skill, idx) => (
-                    <div
-                      key={idx}
-                      className="group flex flex-col items-center gap-3 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all hover:-translate-y-2 hover:border-cyan-400 dark:hover:border-cyan-500"
-                    >
-                      <div
-                        className="w-16 h-16 flex items-center justify-center transition-transform group-hover:scale-110"
-                        style={{ color: darkMode ? skill.color : skill.color }}
-                      >
-                        {skill.icon}
-                      </div>
-                      <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 text-center">
-                        {skill.name}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* AI/ML */}
-              <div className="mb-12">
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
-                  AI / ML
-                </h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
-                  {skills.ai.map((skill, idx) => (
-                    <div
-                      key={idx}
-                      className="group flex flex-col items-center gap-3 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all hover:-translate-y-2 hover:border-cyan-400 dark:hover:border-cyan-500"
-                    >
-                      <div
-                        className="w-16 h-16 flex items-center justify-center transition-transform group-hover:scale-110"
-                        style={{ color: darkMode ? skill.color : skill.color }}
-                      >
-                        {skill.icon}
-                      </div>
-                      <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 text-center">
-                        {skill.name}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Tools & Other */}
-              <div>
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
-                  Tools & Other
-                </h3>
-                <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                  {skills.tools.map((skill, idx) => (
-                    <div
-                      key={idx}
-                      className="group flex flex-col items-center gap-3 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all hover:-translate-y-2 hover:border-cyan-400 dark:hover:border-cyan-500"
-                    >
-                      <div
-                        className="w-16 h-16 flex items-center justify-center transition-transform group-hover:scale-110"
-                        style={{ color: darkMode ? skill.color : skill.color }}
-                      >
-                        {skill.icon}
-                      </div>
-                      <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 text-center">
-                        {skill.name}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Experience Section */}
-        <section
-          id="experience"
-          className="min-h-screen flex items-center px-6 py-20 bg-slate-50 dark:bg-slate-900/50"
-        >
-          <div className="max-w-6xl mx-auto w-full">
-            <div
-              className={`transform transition-all duration-1000 ${isVisible.experience ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}
-            >
-              <div className="flex items-center gap-3 mb-12">
-                <Briefcase className="w-8 h-8 text-cyan-600 dark:text-cyan-400" />
-                <h2 className="text-4xl font-bold text-slate-900 dark:text-white">
-                  Work Experience
-                </h2>
-              </div>
-
-              <div className="relative">
-                {/* Timeline line */}
-                <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-500 to-blue-600"></div>
-
-                <div className="space-y-12">
-                  {[
-                    {
-                      company: "Miljn GmbH",
-                      role: "Frontend Engineer",
-                      period: "2022 - 2023",
-                      description:
-                        "Leading development of scalable web applications using Vue.js, and Tailwind CSS. Collaborating closely with designers and backend engineers to deliver seamless user experiences.",
-                      achievements: [
-                        "Developed reusable UI components using Vue 3 + Tailwind CSS, translating Figma designs into pixel-accurate, WCAG-aligned, production-ready interfaces, improving UI consistency in a fast-paced startup environment.",
-                        "Collaborated with product and design teams to iterate on UI features, and reduced customer-reported UI issues by 40% through expanded unit and integration test coverage and proactive production debugging.",
-                      ],
-                    },
-                    {
-                      company: "LogiQuad Solutions",
-                      role: "Full-Stack Developer",
-                      period: "2018 - 2020",
-                      description:
-                        "Developed and maintained multiple client projects using modern web technologies. Mentoring junior developers and implementing best practices.",
-                      achievements: [
-                        "Led performance optimization for a web application, improving Google PageSpeed (65 to 90+) by implementing image compression and JavaScript/CSS minification, contributing to a 35% increase in organic traffic.",
-                        "Engineered scalable web applications using React and Redux, optimizing performance for 1M+ concurrent users by implementing lazy loading and Webpack optimization.",
-                        "Built an internal cloud management tool enabling non-technical users to securely access and manage S3 data assets, reducing manual cloud operations and improving workflow efficiency.",
-                        "Migrated Laravel backend system to a custom WordPress CMS for a social media-style iOS platform, simplifying content management and improving maintainability of CRUD workflows.",
-                        "Designed and implemented secure RESTful APIs using Node.js and JWT authentication and integrated them with frontend applications using Axios for reliable data exchange.",
-                        "Reduced frontend-related production issues by 20% by introducing structured code reviews and improving state management using Redux.",
-                      ],
-                    },
-                  ].map((exp, idx) => (
-                    <div key={idx} className="relative pl-20">
-                      <div className="absolute left-5 top-2 w-7 h-7 bg-cyan-500 rounded-full border-4 border-white dark:border-slate-950"></div>
-
-                      <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all">
-                        <div className="flex flex-wrap justify-between items-start gap-4 mb-4">
-                          <div>
-                            <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
-                              {exp.role}
-                            </h3>
-                            <p className="text-lg text-cyan-600 dark:text-cyan-400 font-semibold">
-                              {exp.company}
-                            </p>
-                          </div>
-                          <span className="px-4 py-2 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400 rounded-full text-sm font-semibold">
-                            {exp.period}
-                          </span>
-                        </div>
-
-                        <p className="text-slate-600 dark:text-slate-400 mb-4">
-                          {exp.description}
-                        </p>
-
-                        <div className="space-y-2">
-                          {exp.achievements.map((achievement, i) => (
-                            <div key={i} className="flex items-start gap-2">
-                              <span className="text-cyan-600 dark:text-cyan-400 mt-1">
-                                ✓
-                              </span>
-                              <span className="text-slate-700 dark:text-slate-300">
-                                {achievement}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Projects Section */}
-        <section
-          id="projects"
-          className="min-h-screen flex items-center px-6 py-20"
-        >
-          <div className="max-w-6xl mx-auto w-full">
-            <div
-              className={`transform transition-all duration-1000 ${isVisible.projects ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}
-            >
-              <div className="flex items-center gap-3 mb-12">
-                <FolderGit2 className="w-8 h-8 text-cyan-600 dark:text-cyan-400" />
-                <h2 className="text-4xl font-bold text-slate-900 dark:text-white">
-                  Featured Projects
-                </h2>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-8">
-                {[
-                  {
-                    title: "Finance Tracker with GraphQL",
-                    description:
-                      "A full-stack finance tracker web application that helps users manage their financial transactions, track spending patterns, and gain insights into their financial health.",
-                    tech: [
-                      "React",
-                      "Node.js",
-                      "GraphQL",
-                      "Chrome Prompt API",
-                      "Recharts",
-                    ],
-                    image: "🛒",
-                    github:
-                      "https://github.com/ShivaniNR/Finance-Tracker-using-GraphQL",
-                    live: "#",
-                  },
-                  {
-                    title: "Project Two",
-                    description:
-                      "AI-powered chatbot application using natural language processing for customer support.",
-                    tech: ["Python", "TensorFlow", "React", "FastAPI"],
-                    image: "🤖",
-                    github: "#",
-                    live: "#",
-                  },
-                  {
-                    title: "Project Three",
-                    description:
-                      "Social media analytics dashboard with real-time data visualization and reporting.",
-                    tech: ["Next.js", "PostgreSQL", "Chart.js", "AWS"],
-                    image: "📊",
-                    github: "#",
-                    live: "#",
-                  },
-                  {
-                    title: "Project Four",
-                    description:
-                      "Mobile-first task management app with collaborative features and notifications.",
-                    tech: [
-                      "React Native",
-                      "Firebase",
-                      "Redux",
-                      "Push Notifications",
-                    ],
-                    image: "✅",
-                    github: "#",
-                    live: "#",
-                  },
-                ].map((project, idx) => (
-                  <div
-                    key={idx}
-                    className="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-2xl transition-all hover:-translate-y-2"
-                  >
-                    <div className="h-48 bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-6xl">
-                      {project.image}
-                    </div>
-
-                    <div className="p-8">
-                      <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">
-                        {project.title}
-                      </h3>
-                      <p className="text-slate-600 dark:text-slate-400 mb-4">
-                        {project.description}
-                      </p>
-
-                      <div className="flex flex-wrap gap-2 mb-6">
-                        {project.tech.map((tech, i) => (
-                          <span
-                            key={i}
-                            className="px-3 py-1 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400 rounded-full text-sm"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-
-                      <div className="flex gap-4">
-                        <a
-                          href={project.github}
-                          className="flex items-center gap-2 text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
-                        >
-                          <Github className="w-5 h-5" />
-                          <span>Code</span>
-                        </a>
-                        <a
-                          href={project.live}
-                          className="flex items-center gap-2 text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
-                        >
-                          <ExternalLink className="w-5 h-5" />
-                          <span>Live Demo</span>
-                        </a>
-                      </div>
-                    </div>
+                  <div className="bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-slate-800 dark:to-cyan-900/20 p-6 md:p-8 rounded-2xl border border-cyan-200 dark:border-cyan-800/30 overflow-hidden">
+                    <PortfolioStyledPuzzle />
                   </div>
-                ))}
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* Contact Section */}
-        <section
-          id="contact"
-          className="min-h-screen flex items-center px-6 py-20 bg-slate-50 dark:bg-slate-900/50"
-        >
-          <div className="max-w-4xl mx-auto w-full">
-            <div
-              className={`transform transition-all duration-1000 ${isVisible.contact ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}
-            >
-              <div className="text-center mb-12">
-                <div className="flex items-center justify-center gap-3 mb-4">
-                  <Send className="w-8 h-8 text-cyan-600 dark:text-cyan-400" />
-                  <h2 className="text-4xl font-bold text-slate-900 dark:text-white">
-                    Get In Touch
+          {/* Skills Section */}
+          <section
+            id="skills"
+            aria-label="Skills and technologies"
+            className="min-h-screen flex items-center px-6 py-20"
+          >
+            <div className="max-w-6xl mx-auto w-full">
+              <div
+                className={`transform transition-all duration-1000 ${isVisible.skills ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}
+              >
+                <div className="flex items-center gap-3 mb-12">
+                  <Code2
+                    className="w-8 h-8 text-cyan-600 dark:text-cyan-400"
+                    aria-hidden="true"
+                  />
+                  <h2 className="text-2xl sm:text-4xl font-bold text-slate-900 dark:text-white">
+                    Skills & Technologies
                   </h2>
                 </div>
-                <p className="text-lg text-slate-600 dark:text-slate-400">
-                  Have a project in mind or want to collaborate? I&apos;d love to
-                  hear from you!
-                </p>
-              </div>
 
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="space-y-6">
-                  <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700">
-                    <div className="flex items-center gap-4 mb-2">
-                      <Mail className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
-                      <h3 className="font-semibold text-slate-900 dark:text-white">
-                        Email
-                      </h3>
-                    </div>
-                    <a
-                      href="mailto:your.email@example.com"
-                      className="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400"
-                    >
-                      your.email@example.com
-                    </a>
-                  </div>
-
-                  <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700">
-                    <div className="flex items-center gap-4 mb-2">
-                      <Github className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
-                      <h3 className="font-semibold text-slate-900 dark:text-white">
-                        GitHub
-                      </h3>
-                    </div>
-                    <a
-                      href="#"
-                      className="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400"
-                    >
-                      github.com/yourusername
-                    </a>
-                  </div>
-
-                  <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700">
-                    <div className="flex items-center gap-4 mb-2">
-                      <Linkedin className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
-                      <h3 className="font-semibold text-slate-900 dark:text-white">
-                        LinkedIn
-                      </h3>
-                    </div>
-                    <a
-                      href="#"
-                      className="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400"
-                    >
-                      linkedin.com/in/yourname
-                    </a>
+                {/* Frontend Skills */}
+                <div className="mb-12">
+                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
+                    Frontend
+                  </h3>
+                  <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-6">
+                    {skills.frontend.map((skill, idx) => (
+                      <div
+                        key={idx}
+                        className="group flex flex-col items-center gap-3 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all hover:-translate-y-2 hover:border-cyan-400 dark:hover:border-cyan-500"
+                      >
+                        <div
+                          className="w-16 h-16 flex items-center justify-center transition-transform group-hover:scale-110"
+                          style={{
+                            color: darkMode ? skill.color : skill.color,
+                          }}
+                        >
+                          {skill.icon}
+                        </div>
+                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 text-center">
+                          {skill.name}
+                        </span>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-cyan-500 to-blue-600 p-8 rounded-2xl text-white">
-                  <h3 className="text-2xl font-bold mb-4">
-                    Let&apos;s Build Something Amazing
+                {/* Backend Skills */}
+                <div className="mb-12">
+                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
+                    Backend
                   </h3>
-                  <p className="mb-6 opacity-90">
-                    Whether you have a project in mind, need technical
-                    consultation, or just want to connect, I&apos;m always open to
-                    discussing new opportunities.
-                  </p>
-                  <a
-                    href="/Shivani_Rupnawar.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full block text-center bg-white text-cyan-600 py-3 rounded-lg font-semibold hover:shadow-xl transition-all hover:scale-105"
-                  >
-                    View Resume
-                  </a>
+                  <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                    {skills.backend.map((skill, idx) => (
+                      <div
+                        key={idx}
+                        className="group flex flex-col items-center gap-3 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all hover:-translate-y-2 hover:border-cyan-400 dark:hover:border-cyan-500"
+                      >
+                        <div
+                          className="w-16 h-16 flex items-center justify-center transition-transform group-hover:scale-110"
+                          style={{
+                            color: darkMode ? skill.color : skill.color,
+                          }}
+                        >
+                          {skill.icon}
+                        </div>
+                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 text-center">
+                          {skill.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* AI/ML */}
+                <div className="mb-12">
+                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
+                    AI / ML
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
+                    {skills.ai.map((skill, idx) => (
+                      <div
+                        key={idx}
+                        className="group flex flex-col items-center gap-3 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all hover:-translate-y-2 hover:border-cyan-400 dark:hover:border-cyan-500"
+                      >
+                        <div
+                          className="w-16 h-16 flex items-center justify-center transition-transform group-hover:scale-110"
+                          style={{
+                            color: darkMode ? skill.color : skill.color,
+                          }}
+                        >
+                          {skill.icon}
+                        </div>
+                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 text-center">
+                          {skill.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Tools & Other */}
+                <div>
+                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
+                    Tools & Other
+                  </h3>
+                  <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                    {skills.tools.map((skill, idx) => (
+                      <div
+                        key={idx}
+                        className="group flex flex-col items-center gap-3 p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all hover:-translate-y-2 hover:border-cyan-400 dark:hover:border-cyan-500"
+                      >
+                        <div
+                          className="w-16 h-16 flex items-center justify-center transition-transform group-hover:scale-110"
+                          style={{
+                            color: darkMode ? skill.color : skill.color,
+                          }}
+                        >
+                          {skill.icon}
+                        </div>
+                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 text-center">
+                          {skill.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+
+          {/* Experience Section */}
+          <section
+            id="experience"
+            aria-label="Work experience"
+            className="min-h-screen flex items-center px-6 py-20 bg-slate-50 dark:bg-slate-900/50"
+          >
+            <div className="max-w-6xl mx-auto w-full">
+              <div
+                className={`transform transition-all duration-1000 ${isVisible.experience ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}
+              >
+                <div className="flex items-center gap-3 mb-12">
+                  <Briefcase
+                    className="w-8 h-8 text-cyan-600 dark:text-cyan-400"
+                    aria-hidden="true"
+                  />
+                  <h2 className="text-2xl sm:text-4xl font-bold text-slate-900 dark:text-white">
+                    Work Experience
+                  </h2>
+                </div>
+
+                <div className="relative">
+                  {/* Timeline line */}
+                  <div className="absolute left-4 sm:left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-500 to-blue-600"></div>
+
+                  <div className="space-y-12">
+                    {[
+                      {
+                        company: "Miljn GmbH",
+                        role: "Frontend Engineer",
+                        period: "2022 - 2023",
+                        description:
+                          "Leading development of scalable web applications using Vue.js, and Tailwind CSS. Collaborating closely with designers and backend engineers to deliver seamless user experiences.",
+                        achievements: [
+                          "Developed production-grade user centric features, delivering an engaging user interface, improving UI consistency in a fast-paced startup environment.",
+                          "Reduced customer-reported UI bugs by 40% through expanded test coverage and proactive production debugging.",
+                        ],
+                      },
+                      {
+                        company: "LogiQuad Solutions",
+                        role: "Full-Stack Developer",
+                        period: "2018 - 2020",
+                        description:
+                          "Developed and maintained multiple client projects using modern web technologies. Mentoring junior developers and implementing best practices.",
+                        achievements: [
+                          "Improved Google PageSpeed from 65 to 90+, driving a 35% increase in organic traffic.",
+                          "Scaled React + Redux apps to handle 1M+ concurrent users via lazy loading and Webpack optimization.",
+                          "Built an internal S3 management tool, eliminated manual cloud operations for non-technical teams.",
+                          "Cut frontend production issues by 20% through structured code reviews and improved state management.",
+                        ],
+                      },
+                    ].map((exp, idx) => (
+                      <div key={idx} className="relative pl-12 sm:pl-20">
+                        <div className="absolute left-1 sm:left-5 top-2 w-6 h-6 sm:w-7 sm:h-7 bg-cyan-500 rounded-full border-4 border-white dark:border-slate-950"></div>
+
+                        <div className="bg-white dark:bg-slate-800 p-4 sm:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 hover:shadow-xl transition-all">
+                          <div className="flex flex-wrap justify-between items-start gap-4 mb-4">
+                            <div>
+                              <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
+                                {exp.role}
+                              </h3>
+                              <p className="text-lg text-cyan-600 dark:text-cyan-400 font-semibold">
+                                {exp.company}
+                              </p>
+                            </div>
+                            <span className="px-4 py-2 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400 rounded-full text-sm font-semibold">
+                              {exp.period}
+                            </span>
+                          </div>
+
+                          <p className="text-slate-600 dark:text-slate-400 mb-4">
+                            {exp.description}
+                          </p>
+
+                          <div className="space-y-2">
+                            {exp.achievements.map((achievement, i) => (
+                              <div key={i} className="flex items-start gap-2">
+                                <span className="text-cyan-600 dark:text-cyan-400 mt-1">
+                                  ✓
+                                </span>
+                                <span className="text-slate-700 dark:text-slate-300">
+                                  {achievement}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Projects Section */}
+          <section
+            id="projects"
+            aria-label="Featured projects"
+            className="min-h-screen flex items-center px-6 py-20"
+          >
+            <div className="max-w-6xl mx-auto w-full">
+              <div
+                className={`transform transition-all duration-1000 ${isVisible.projects ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}
+              >
+                <div className="flex items-center gap-3 mb-12">
+                  <FolderGit2
+                    className="w-8 h-8 text-cyan-600 dark:text-cyan-400"
+                    aria-hidden="true"
+                  />
+                  <h2 className="text-2xl sm:text-4xl font-bold text-slate-900 dark:text-white">
+                    Featured Projects
+                  </h2>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-8">
+                  {[
+                    {
+                      title: "qabot — Adversarial QA Agent",
+                      description:
+                        "A CLI tool that tests web apps using LLMs and real browser automation. Discovers routes, runs plain-English test cases, and performs adversarial attacks like XSS and auth bypass.",
+                      tech: [
+                        "Python",
+                        "browser-use",
+                        "Playwright",
+                        "LLM APIs",
+                        "Click",
+                        "Pydantic",
+                      ],
+                      image: "🛡️",
+                      github: "https://github.com/ShivaniNR/qabot",
+                      live: "#",
+                    },
+                    {
+                      title: "Finance Tracker with GraphQL",
+                      description:
+                        "A full-stack finance tracker web application that helps users manage their financial transactions, track spending patterns, and gain insights into their financial health.",
+                      tech: [
+                        "React",
+                        "Node.js",
+                        "GraphQL",
+                        "Chrome Prompt API",
+                        "Recharts",
+                      ],
+                      image: "🛒",
+                      github:
+                        "https://github.com/ShivaniNR/Finance-Tracker-using-GraphQL",
+                      live: "#",
+                    },
+                    {
+                      title: "Recipe Retriever — RAG Search",
+                      description:
+                        "A semantic recipe search engine powered by RAG. Users query in natural language and get relevant recipes via FAISS vector similarity — no exact keywords needed.",
+                      tech: [
+                        "Python",
+                        "LangChain",
+                        "FAISS",
+                        "Streamlit",
+                        "HuggingFace",
+                      ],
+                      image: "🍳",
+                      github:
+                        "https://github.com/ShivaniNR/Recipe-Retriever-RAG",
+                      live: "https://www.loom.com/share/4145cfbab20b46fbae59c23e69b70876",
+                    },
+                    {
+                      title: "Agents Assemble — Life Witness",
+                      description:
+                        "A multi-agent AI memory assistant. Capture life events via voice, text, or photos and retrieve them with natural language — powered by 6 specialized agents orchestrated with LangGraph.",
+                      tech: [
+                        "Python",
+                        "FastAPI",
+                        "Gemini AI",
+                        "LangGraph",
+                        "FAISS",
+                        "Next.js",
+                      ],
+                      image: "🧠",
+                      github: "https://github.com/ShivaniNR/agents-assemble",
+                      live: "https://drive.google.com/file/d/1AWB-GwmvixPSjbfzrUHduo_pKVOQnwl0/view?usp=sharing",
+                    },
+                  ].map((project, idx) => (
+                    <div
+                      key={idx}
+                      className="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-2xl transition-all hover:-translate-y-2"
+                    >
+                      <div className="h-48 bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-6xl">
+                        {project.image}
+                      </div>
+
+                      <div className="p-8">
+                        <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">
+                          {project.title}
+                        </h3>
+                        <p className="text-slate-600 dark:text-slate-400 mb-4">
+                          {project.description}
+                        </p>
+
+                        <div className="flex flex-wrap gap-2 mb-6">
+                          {project.tech.map((tech, i) => (
+                            <span
+                              key={i}
+                              className="px-3 py-1 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400 rounded-full text-sm"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+
+                        <div className="flex gap-4">
+                          <a
+                            href={project.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`View source code for ${project.title}`}
+                            className="flex items-center gap-2 text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
+                          >
+                            <Github className="w-5 h-5" aria-hidden="true" />
+                            <span>Code</span>
+                          </a>
+                          {project.live && project.live !== "#" && (
+                            <a
+                              href={project.live}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={`View live demo of ${project.title}`}
+                              className="flex items-center gap-2 text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
+                            >
+                              <ExternalLink className="w-5 h-5" />
+                              <span>Live Demo</span>
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Contact Section */}
+          <section
+            id="contact"
+            aria-label="Contact information"
+            className="min-h-screen flex items-center px-6 py-20 bg-slate-50 dark:bg-slate-900/50"
+          >
+            <div className="max-w-4xl mx-auto w-full">
+              <div
+                className={`transform transition-all duration-1000 ${isVisible.contact ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}
+              >
+                <div className="text-center mb-12">
+                  <div className="flex items-center justify-center gap-3 mb-4">
+                    <Send
+                      className="w-8 h-8 text-cyan-600 dark:text-cyan-400"
+                      aria-hidden="true"
+                    />
+                    <h2 className="text-2xl sm:text-4xl font-bold text-slate-900 dark:text-white">
+                      Get In Touch
+                    </h2>
+                  </div>
+                  <p className="text-lg text-slate-600 dark:text-slate-400">
+                    Have a project in mind or want to collaborate? I&apos;d love
+                    to hear from you!
+                  </p>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div className="space-y-6">
+                    <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700">
+                      <div className="flex items-center gap-4 mb-2">
+                        <Mail
+                          className="w-6 h-6 text-cyan-600 dark:text-cyan-400"
+                          aria-hidden="true"
+                        />
+                        <h3 className="font-semibold text-slate-900 dark:text-white">
+                          Email
+                        </h3>
+                      </div>
+                      <a
+                        href="mailto:shivani.n.rupnawar@gmail.com"
+                        aria-label="Send email to shivani.n.rupnawar@gmail.com"
+                        className="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400"
+                      >
+                        shivani.n.rupnawar@gmail.com
+                      </a>
+                    </div>
+
+                    <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700">
+                      <div className="flex items-center gap-4 mb-2">
+                        <Github
+                          className="w-6 h-6 text-cyan-600 dark:text-cyan-400"
+                          aria-hidden="true"
+                        />
+                        <h3 className="font-semibold text-slate-900 dark:text-white">
+                          GitHub
+                        </h3>
+                      </div>
+                      <a
+                        href="https://github.com/ShivaniNR"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Visit GitHub profile"
+                        className="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 break-all"
+                      >
+                        github.com/ShivaniNR
+                      </a>
+                    </div>
+
+                    <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700">
+                      <div className="flex items-center gap-4 mb-2">
+                        <Linkedin
+                          className="w-6 h-6 text-cyan-600 dark:text-cyan-400"
+                          aria-hidden="true"
+                        />
+                        <h3 className="font-semibold text-slate-900 dark:text-white">
+                          LinkedIn
+                        </h3>
+                      </div>
+                      <a
+                        href="https://www.linkedin.com/in/shivani-rupnawar/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Visit LinkedIn profile"
+                        className="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 break-all"
+                      >
+                        linkedin.com/in/shivani-rupnawar
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-cyan-500 to-blue-600 p-8 rounded-2xl text-white">
+                    <h3 className="text-2xl font-bold mb-4">
+                      Let&apos;s Build Something Amazing
+                    </h3>
+                    <p className="mb-6 opacity-90">
+                      Whether you have a project in mind, need technical
+                      consultation, or just want to connect, I&apos;m always
+                      open to discussing new opportunities.
+                    </p>
+                    <a
+                      href="/Shivani_Rupnawar.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full block text-center bg-white text-cyan-600 py-3 rounded-lg font-semibold hover:shadow-xl transition-all hover:scale-105"
+                    >
+                      View Resume
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
 
         {/* Footer */}
-        <footer className="py-8 px-6 border-t border-slate-200 dark:border-slate-800">
+        <footer
+          role="contentinfo"
+          className="py-8 px-6 border-t border-slate-200 dark:border-slate-800"
+        >
           <div className="max-w-6xl mx-auto text-center">
             <p className="text-slate-600 dark:text-slate-400">
               © 2024 Shivani Rupnawar. Built with React & Tailwind CSS

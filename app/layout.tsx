@@ -5,16 +5,16 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Your Name - Full Stack Developer",
+  title: "Shivani Rupnawar - Full Stack Software Engineer",
   description:
-    "Portfolio of Your Name - Full Stack Developer specializing in React, Node.js, and modern web technologies",
+    "Portfolio of Shivani Rupnawar - Full Stack Software Engineer specializing in React, Node.js, PostgreSQL, and modern web technologies",
   keywords: ["web developer", "full stack", "React", "Node.js", "portfolio"],
-  authors: [{ name: "Your Name" }],
+  authors: [{ name: "Shivani Rupnawar" }],
   openGraph: {
-    title: "Your Name - Full Stack Developer",
+    title: "Shivani Rupnawar - Full Stack Software Engineer",
     description: "Portfolio showcasing my work and projects",
     url: "https://yourwebsite.com",
-    siteName: "Your Name Portfolio",
+    siteName: "Shivani Rupnawar Portfolio",
     images: [
       {
         url: "https://yourwebsite.com/og-image.jpg",

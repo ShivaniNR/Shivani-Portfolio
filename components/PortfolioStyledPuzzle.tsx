@@ -3,39 +3,56 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 
-interface PieceData {
-  id: string;
-  finalX: number;
-  finalY: number;
-  textId: string;
-}
+const softSkills = [
+  {
+    id: "piece1",
+    label: "Problem Solver",
+    icon: "M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z",
+    gradient: "from-cyan-500 to-cyan-600",
+  },
+  {
+    id: "piece2",
+    label: "Team Player",
+    icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z",
+    gradient: "from-blue-500 to-blue-600",
+  },
+  {
+    id: "piece3",
+    label: "Quick Learner",
+    icon: "M13 10V3L4 14h7v7l9-11h-7z",
+    gradient: "from-cyan-400 to-cyan-500",
+  },
+  {
+    id: "piece4",
+    label: "Communicator",
+    icon: "M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z",
+    gradient: "from-blue-600 to-indigo-600",
+  },
+];
 
 export default function PortfolioStyledPuzzle() {
   const [isScattered, setIsScattered] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [buttonText, setButtonText] = useState("Make It Make Sense");
-  const piecesRef = useRef<PieceData[]>([
-    { id: "piece1", finalX: 0, finalY: 0, textId: "text1" },
-    { id: "piece2", finalX: 0, finalY: 0, textId: "text2" },
-    { id: "piece3", finalX: 0, finalY: 0, textId: "text3" },
-    { id: "piece4", finalX: 0, finalY: 0, textId: "text4" },
-  ]);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const scatterPieces = () => {
-    piecesRef.current.forEach((piece, index) => {
-      const element = document.getElementById(piece.id);
+    softSkills.forEach((skill, index) => {
+      const element = document.getElementById(skill.id);
       if (!element) return;
 
       const angle = Math.random() * 360;
-      const distance = 150 + Math.random() * 100;
+      const distance = 80 + Math.random() * 60;
       const x = Math.cos((angle * Math.PI) / 180) * distance;
       const y = Math.sin((angle * Math.PI) / 180) * distance;
-      const rotation = -30 + Math.random() * 60;
+      const rotation = -15 + Math.random() * 30;
 
       gsap.to(element, {
-        x: x,
-        y: y,
-        rotation: rotation,
+        x,
+        y,
+        rotation,
+        scale: 0.9,
+        opacity: 0.7,
         duration: 0.8,
         ease: "back.out(1.7)",
         delay: index * 0.1,
@@ -45,14 +62,16 @@ export default function PortfolioStyledPuzzle() {
   };
 
   const organizePieces = () => {
-    piecesRef.current.forEach((piece, index) => {
-      const element = document.getElementById(piece.id);
+    softSkills.forEach((skill, index) => {
+      const element = document.getElementById(skill.id);
       if (!element) return;
 
       gsap.to(element, {
         x: 0,
         y: 0,
         rotation: 0,
+        scale: 1,
+        opacity: 1,
         duration: 1,
         ease: "elastic.out(1, 0.5)",
         delay: index * 0.15,
@@ -79,9 +98,7 @@ export default function PortfolioStyledPuzzle() {
       organizePieces();
       setButtonText("Organizing...");
       setButtonDisabled(true);
-      setTimeout(() => {
-        setButtonDisabled(false);
-      }, 2000);
+      setTimeout(() => setButtonDisabled(false), 2000);
     } else {
       scatterPieces();
       setButtonText("Make It Make Sense");
@@ -94,7 +111,7 @@ export default function PortfolioStyledPuzzle() {
     if (!element) return;
 
     gsap.to(element, {
-      rotation: "+=15",
+      rotation: "+=10",
       duration: 0.1,
       yoyo: true,
       repeat: 3,
@@ -103,344 +120,91 @@ export default function PortfolioStyledPuzzle() {
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      scatterPieces();
-    }, 500);
+    const timer = setTimeout(() => scatterPieces(), 500);
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <div className="bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-slate-800 dark:to-cyan-900/20 p-6 md:p-8 rounded-2xl border border-cyan-200 dark:border-cyan-800/30 overflow-hidden">
-      {/* Header - Matches portfolio style */}
+    <div aria-label="Soft skills puzzle" className="flex flex-col items-center">
+      {/* Header */}
       <div className="text-center mb-6">
-        <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2">
+        <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-1">
           {isScattered ? "The Raw Ingredients" : "My Soft Skills"}
         </h3>
-        <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400">
+        <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400">
           {isScattered
-            ? "...of a great teammate 🧩"
-            : "Pieces assembled and ready to collaborate ✨"}
+            ? "...of a great teammate"
+            : "Pieces assembled and ready to collaborate"}
         </p>
       </div>
 
-      {/* Puzzle Area */}
+      {/* Puzzle Grid */}
       <div
-        className="relative mx-auto mb-6"
-        style={{ maxWidth: "400px", aspectRatio: "1/1" }}
+        ref={containerRef}
+        className="grid grid-cols-2 gap-3 md:gap-4 mb-6 w-full max-w-xs"
       >
-        <svg
-          viewBox="0 0 500 500"
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-full h-full"
-        >
-          <defs>
-            {/* Updated gradients to match portfolio cyan/blue theme */}
-            <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop
-                offset="0%"
-                style={{ stopColor: "#06b6d4", stopOpacity: 1 }}
-              />
-              <stop
-                offset="100%"
-                style={{ stopColor: "#0891b2", stopOpacity: 1 }}
-              />
-            </linearGradient>
-
-            <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop
-                offset="0%"
-                style={{ stopColor: "#0ea5e9", stopOpacity: 1 }}
-              />
-              <stop
-                offset="100%"
-                style={{ stopColor: "#0284c7", stopOpacity: 1 }}
-              />
-            </linearGradient>
-
-            <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop
-                offset="0%"
-                style={{ stopColor: "#22d3ee", stopOpacity: 1 }}
-              />
-              <stop
-                offset="100%"
-                style={{ stopColor: "#06b6d4", stopOpacity: 1 }}
-              />
-            </linearGradient>
-
-            <linearGradient id="gradient4" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop
-                offset="0%"
-                style={{ stopColor: "#2563eb", stopOpacity: 1 }}
-              />
-              <stop
-                offset="100%"
-                style={{ stopColor: "#1d4ed8", stopOpacity: 1 }}
-              />
-            </linearGradient>
-
-            {/* Shadow filter */}
-            <filter id="shadow">
-              <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
-              <feOffset dx="2" dy="2" result="offsetblur" />
-              <feComponentTransfer>
-                <feFuncA type="linear" slope="0.5" />
-              </feComponentTransfer>
-              <feMerge>
-                <feMergeNode />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-
-          {/* Puzzle pieces with updated colors */}
-          <g
-            id="piece1"
-            className="cursor-pointer hover:brightness-110 transition-all"
-            filter="url(#shadow)"
-            onClick={(e) => handlePieceClick(e, "piece1")}
+        {softSkills.map((skill) => (
+          <div
+            key={skill.id}
+            id={skill.id}
+            onClick={(e) => handlePieceClick(e, skill.id)}
+            className={`
+              cursor-pointer select-none
+              bg-gradient-to-br ${skill.gradient}
+              rounded-xl p-4 md:p-5
+              shadow-lg hover:shadow-xl
+              border border-white/20
+              flex flex-col items-center justify-center gap-2
+              aspect-square
+              transition-shadow
+            `}
           >
-            <path
-              d="M 50 50 L 250 50 L 250 230 Q 250 235 245 237 Q 235 240 235 250 Q 235 260 245 263 Q 250 265 250 270 L 250 250 L 50 250 L 50 50 Z"
-              fill="url(#gradient1)"
-              stroke="rgba(0,0,0,0.2)"
-              strokeWidth="2"
-            />
-            <path
-              d="M 50 50 L 250 50 L 250 230 Q 250 235 245 237 Q 235 240 235 250 Q 235 260 245 263 Q 250 265 250 270 L 250 250 L 50 250 L 50 50 Z"
+            <svg
+              className="w-8 h-8 md:w-10 md:h-10 text-white/90"
               fill="none"
-              stroke="white"
-              strokeWidth="1"
-              opacity="0.3"
-            />
-            <text
-              x="150"
-              y="140"
-              textAnchor="middle"
-              fill="white"
-              fontSize="20"
-              fontWeight="700"
-              fontFamily="system-ui, -apple-system, sans-serif"
-              style={{ pointerEvents: "none" }}
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
             >
-              Problem
-            </text>
-            <text
-              x="150"
-              y="165"
-              textAnchor="middle"
-              fill="white"
-              fontSize="20"
-              fontWeight="700"
-              fontFamily="system-ui, -apple-system, sans-serif"
-              style={{ pointerEvents: "none" }}
-            >
-              Solver
-            </text>
-          </g>
-
-          <g
-            id="piece2"
-            className="cursor-pointer hover:brightness-110 transition-all"
-            filter="url(#shadow)"
-            onClick={(e) => handlePieceClick(e, "piece2")}
-          >
-            <path
-              d="M 250 50 L 450 50 L 450 250 L 270 250 Q 265 250 263 245 Q 260 235 250 235 Q 240 235 237 245 Q 235 250 230 250 L 250 250 L 250 50 Z"
-              fill="url(#gradient2)"
-              stroke="rgba(0,0,0,0.2)"
-              strokeWidth="2"
-            />
-            <path
-              d="M 250 50 L 450 50 L 450 250 L 270 250 Q 265 250 263 245 Q 260 235 250 235 Q 240 235 237 245 Q 235 250 230 250 L 250 250 L 250 50 Z"
-              fill="none"
-              stroke="white"
-              strokeWidth="1"
-              opacity="0.3"
-            />
-            <text
-              x="350"
-              y="140"
-              textAnchor="middle"
-              fill="white"
-              fontSize="20"
-              fontWeight="700"
-              fontFamily="system-ui, -apple-system, sans-serif"
-              style={{ pointerEvents: "none" }}
-            >
-              Team
-            </text>
-            <text
-              x="350"
-              y="165"
-              textAnchor="middle"
-              fill="white"
-              fontSize="20"
-              fontWeight="700"
-              fontFamily="system-ui, -apple-system, sans-serif"
-              style={{ pointerEvents: "none" }}
-            >
-              Player
-            </text>
-          </g>
-
-          <g
-            id="piece3"
-            className="cursor-pointer hover:brightness-110 transition-all"
-            filter="url(#shadow)"
-            onClick={(e) => handlePieceClick(e, "piece3")}
-          >
-            <path
-              d="M 50 250 L 250 250 L 250 270 Q 250 265 255 263 Q 265 260 265 250 Q 265 240 255 237 Q 250 235 250 230 L 250 250 L 250 450 L 50 450 L 50 250 Z"
-              fill="url(#gradient3)"
-              stroke="rgba(0,0,0,0.2)"
-              strokeWidth="2"
-            />
-            <path
-              d="M 50 250 L 250 250 L 250 270 Q 250 265 255 263 Q 265 260 265 250 Q 265 240 255 237 Q 250 235 250 230 L 250 250 L 250 450 L 50 450 L 50 250 Z"
-              fill="none"
-              stroke="white"
-              strokeWidth="1"
-              opacity="0.3"
-            />
-            <text
-              x="150"
-              y="340"
-              textAnchor="middle"
-              fill="white"
-              fontSize="20"
-              fontWeight="700"
-              fontFamily="system-ui, -apple-system, sans-serif"
-              style={{ pointerEvents: "none" }}
-            >
-              Quick
-            </text>
-            <text
-              x="150"
-              y="365"
-              textAnchor="middle"
-              fill="white"
-              fontSize="20"
-              fontWeight="700"
-              fontFamily="system-ui, -apple-system, sans-serif"
-              style={{ pointerEvents: "none" }}
-            >
-              Learner
-            </text>
-          </g>
-
-          <g
-            id="piece4"
-            className="cursor-pointer hover:brightness-110 transition-all"
-            filter="url(#shadow)"
-            onClick={(e) => handlePieceClick(e, "piece4")}
-          >
-            <path
-              d="M 250 250 L 230 250 Q 235 250 237 255 Q 240 265 250 265 Q 260 265 263 255 Q 265 250 270 250 L 250 250 L 450 250 L 450 450 L 250 450 L 250 250 Z"
-              fill="url(#gradient4)"
-              stroke="rgba(0,0,0,0.2)"
-              strokeWidth="2"
-            />
-            <path
-              d="M 250 250 L 230 250 Q 235 250 237 255 Q 240 265 250 265 Q 260 265 263 255 Q 265 250 270 250 L 250 250 L 450 250 L 450 450 L 250 450 L 250 250 Z"
-              fill="none"
-              stroke="white"
-              strokeWidth="1"
-              opacity="0.3"
-            />
-            <text
-              x="350"
-              y="340"
-              textAnchor="middle"
-              fill="white"
-              fontSize="20"
-              fontWeight="700"
-              fontFamily="system-ui, -apple-system, sans-serif"
-              style={{ pointerEvents: "none" }}
-            >
-              Communi-
-            </text>
-            <text
-              x="350"
-              y="365"
-              textAnchor="middle"
-              fill="white"
-              fontSize="20"
-              fontWeight="700"
-              fontFamily="system-ui, -apple-system, sans-serif"
-              style={{ pointerEvents: "none" }}
-            >
-              cator
-            </text>
-          </g>
-        </svg>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d={skill.icon}
+              />
+            </svg>
+            <span className="text-white font-semibold text-xs md:text-sm text-center leading-tight">
+              {skill.label}
+            </span>
+          </div>
+        ))}
       </div>
 
-      {/* Button - Matches portfolio button style */}
-      <div className="text-center">
-        <button
-          onClick={handleButtonClick}
-          disabled={buttonDisabled}
-          className={`
-            px-6 md:px-8 py-2.5 md:py-3 rounded-xl font-bold text-sm md:text-base
-            transition-all duration-300
-            transform hover:scale-105 active:scale-95
-            ${
-              isScattered
-                ? "bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700"
-                : "bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800"
-            }
-            text-white shadow-lg hover:shadow-xl
-            border-2 border-white/20
-            w-full md:w-auto
-            disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100
-          `}
-        >
-          <span className="flex items-center justify-center gap-2">
-            {isScattered ? (
-              <>
-                <svg
-                  className="w-4 h-4 md:w-5 md:h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 10V3L4 14h7v7l9-11h-7z"
-                  />
-                </svg>
-                {buttonText}
-              </>
-            ) : (
-              <>
-                <svg
-                  className="w-4 h-4 md:w-5 md:h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
-                </svg>
-                {buttonText}
-              </>
-            )}
-          </span>
-        </button>
+      {/* Button */}
+      <button
+        onClick={handleButtonClick}
+        disabled={buttonDisabled}
+        aria-label={isScattered ? "Assemble puzzle pieces" : "Scatter puzzle pieces"}
+        className={`
+          px-6 md:px-8 py-2.5 md:py-3 rounded-lg font-semibold text-sm md:text-base
+          transition-all duration-300
+          hover:scale-105 active:scale-95
+          ${
+            isScattered
+              ? "bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700"
+              : "border-2 border-cyan-500 dark:border-cyan-400 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-900/30"
+          }
+          ${isScattered ? "text-white" : ""}
+          shadow-md hover:shadow-lg
+          disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100
+        `}
+      >
+        {buttonText}
+      </button>
 
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-3 italic">
-          {isScattered
-            ? "Click to assemble the puzzle"
-            : "Perfectly interlocked! 🎯"}
-        </p>
-      </div>
+      <p className="text-xs text-slate-400 dark:text-slate-500 mt-3">
+        {isScattered ? "Click to assemble" : "Click to scatter"}
+      </p>
     </div>
   );
 }
